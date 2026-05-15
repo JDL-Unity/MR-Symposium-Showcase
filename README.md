@@ -1,2 +1,2 @@
-# MR-Symposium-Showcase
+# MR Symposium Showcase - Marker-Based Experiences
 As part of the Symposium, the EdTech Team plans to develop and deploy a Marker-Based experience that introduces small interactives and virtual displays of works by students and academics at the University.
