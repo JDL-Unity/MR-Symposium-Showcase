@@ -9,6 +9,7 @@ using Sirenix.OdinInspector;
 public class QRCodeManager : SerializedMonoBehaviour
 {
     [Title("References")]
+    public SpatialAnchorManager anchorManager;
     public Dictionary<string, GameObject> QRCodeMap;
     
     private void Start()
@@ -27,7 +28,7 @@ public class QRCodeManager : SerializedMonoBehaviour
         
         if (QRCodeMap.TryGetValue(payload, out GameObject prefab))
         {
-            Console.WriteLine($"Spawning {payload} object");
+            Console.WriteLine($"Payload Found for {payload} object");
         }
         else
         {
@@ -37,20 +38,26 @@ public class QRCodeManager : SerializedMonoBehaviour
         
         // Setting the position and rotation to place the object on
         Vector3 targetPos = qrCode.transform.position;
-        Quaternion rotation = Quaternion.LookRotation(-qrCode.transform.forward, qrCode.transform.up);
+        Quaternion targetRotation = qrCode.transform.rotation;
         
-        // Spawn the object ontop of the QR code
-        GameObject spawnedObj = Instantiate(prefab, targetPos, rotation);
+        targetRotation *= Quaternion.Euler(90f, 0f, 0f);
+        
+        // // Spawn the object ontop of the QR code
+        // GameObject spawnedObj = Instantiate(prefab, targetPos, rotation);
+        //
+        //
+        // // Setting the scale to fit the QR code
+        // float width = qrCode.PlaneRect.Value.width;
+        // float height = qrCode.PlaneRect.Value.height;
+        //
+        // float scaleVal = (width + height) / 2;
+        // spawnedObj.transform.localScale = new Vector3(scaleVal, scaleVal, scaleVal);
+        //
+        // // This ensures that the object follows the QR code
+        // spawnedObj.transform.parent = qrCode.transform;
+        
+        anchorManager.CreateSpatialAnchorAtQRCode(targetPos, targetRotation, payload);
         
         
-        // Setting the scale to fit the QR code
-        float width = qrCode.PlaneRect.Value.width;
-        float height = qrCode.PlaneRect.Value.height;
-        
-        float scaleVal = (width + height) / 2;
-        spawnedObj.transform.localScale = new Vector3(scaleVal, scaleVal, scaleVal);
-        
-        // This ensures that the object follows the QR code
-        spawnedObj.transform.parent = qrCode.transform;
     }
 }
