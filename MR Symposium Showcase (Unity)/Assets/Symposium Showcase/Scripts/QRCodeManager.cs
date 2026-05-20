@@ -16,7 +16,6 @@ public class QRCodeManager : SerializedMonoBehaviour
     
     private void Start()
     {
-        // Add a listener to listen for when a QR code gets detected.
         MRUK.Instance.SceneSettings.TrackableAdded.AddListener(OnQRCodeDetected);
     }
 
@@ -26,20 +25,15 @@ public class QRCodeManager : SerializedMonoBehaviour
         if (qrCode.TrackableType == OVRAnchor.TrackableType.Keyboard) return; 
 
         if (qrCode.MarkerPayloadString is not string payload) return;
-
-        // --- DUPLICATE CHECK ---
-        // Grab the position of the newly detected QR code
+        
         Vector3 detectedPos = qrCode.transform.position;
 
-        // Ask the AnchorManager if we already have a trackable anchor living here
         if (anchorManager.IsAnchorAlreadyAtPosition(detectedPos, duplicateProximityThreshold))
         {
             Debug.Log($"Ignored QR code with payload '{payload}' because a localised spatial anchor already exists here.");
-            return; // Exit early! Do not create or spawn a duplicate.
+            return; 
         }
-        // -----------------------
     
-        // Find the correct prefab from your Odin Dictionary mapping
         if (QRCodeMap.TryGetValue(payload, out GameObject prefab))
         {
             Debug.Log($"Payload Found for {payload} object");
@@ -57,7 +51,6 @@ public class QRCodeManager : SerializedMonoBehaviour
         }
     }
     
-    // Add this helper method inside QRCodeManager.cs
     public GameObject GetPrefabByPayload(string payload)
     {
         if (QRCodeMap != null && QRCodeMap.TryGetValue(payload, out GameObject prefab))

@@ -7,7 +7,7 @@ using UnityEngine;
 public class SpatialAnchorManager : MonoBehaviour
 {
     public OVRSpatialAnchor anchorPrefab;
-    public QRCodeManager qrCodeManager; // Drag your QRCodeManager here in the Inspector
+    public QRCodeManager qrCodeManager;
     
     public const string NumUuidsPlayerPref = "NumUuids";    
     private Canvas canvas;
@@ -18,12 +18,10 @@ public class SpatialAnchorManager : MonoBehaviour
     private List<OVRSpatialAnchor> anchors = new List<OVRSpatialAnchor>();
     private OVRSpatialAnchor prevAnchor;
 
-    // Dictionary tracking our spawned models against their respective anchors to control visibility
     private Dictionary<OVRSpatialAnchor, GameObject> spawnedModelsMap = new Dictionary<OVRSpatialAnchor, GameObject>();
 
     void OnEnable()
     {
-        // Hook into Meta OVRManager to listen for user head-mounted device state shifts
         OVRManager.HMDMounted += OnHeadsetPutOn;
         OVRManager.HMDUnmounted += OnHeadsetTakenOff;
     }
@@ -62,7 +60,6 @@ public class SpatialAnchorManager : MonoBehaviour
         }
     }
 
-    // --- SLEEP STATE MANAGEMENT CODE ---
     private void OnHeadsetTakenOff()
     {
         // Headset lost tracking / put in standby. Hide everything to prevent visual jumps.
@@ -79,11 +76,10 @@ public class SpatialAnchorManager : MonoBehaviour
     {
         Debug.Log("Headset donned. Holding virtual content visibility until tracking updates settle...");
         
-        // Wait a brief brief moment for the camera feeds to spin up
         yield return new WaitForSeconds(0.5f);
 
         bool allAnchorsReady = false;
-        int timeoutFrames = 300; // ~5 seconds safety fallback loop limit
+        int timeoutFrames = 300; 
 
         while (!allAnchorsReady && timeoutFrames > 0)
         {
@@ -94,7 +90,6 @@ public class SpatialAnchorManager : MonoBehaviour
             {
                 if (anchor == null) continue;
 
-                // Crucial Check: If the Meta SDK flags Localized as false, it means tracking is shifting/dirty.
                 if (!anchor.Localized)
                 {
                     allAnchorsReady = false;
@@ -108,7 +103,6 @@ public class SpatialAnchorManager : MonoBehaviour
             }
         }
 
-        // Tracking frames match physical features again! Reveal the clean transforms.
         ToggleAllVirtualContent(true);
         Debug.Log("Meta tracking localized successfully. Restoring virtual elements.");
     }
@@ -122,7 +116,6 @@ public class SpatialAnchorManager : MonoBehaviour
                 kvp.Value.SetActive(isVisible);
             }
             
-            // Also hide/show the tracking text overlays if you want clean room visuals
             Canvas anchorCanvas = kvp.Key.GetComponentInChildren<Canvas>();
             if (anchorCanvas != null)
             {
@@ -138,7 +131,6 @@ public class SpatialAnchorManager : MonoBehaviour
             UnsaveAnchor(anchor);
         }
         
-        // Clean up visual map dictionaries alongside tracking arrays
         spawnedModelsMap.Clear();
         anchors.Clear();
         ClearAllUuidsFromPlayerPrefs();
@@ -240,7 +232,6 @@ public class SpatialAnchorManager : MonoBehaviour
             spawnedModel.transform.localPosition = Vector3.zero;
             spawnedModel.transform.localRotation = Quaternion.identity;
         
-            // ADJUST HEIGHT HERE: Check for DebugCube and offset its local Y axis safely
             DebugCube debugCube = spawnedModel.GetComponent<DebugCube>();
             if (debugCube != null)
             {
@@ -274,7 +265,6 @@ public class SpatialAnchorManager : MonoBehaviour
         nameText.text = name;
     }
 
-    // --- LOADING CHRONOLOGY FOR SAVED ANCHORS ---
     private void LoadSavedAnchors()
     {
         if (!PlayerPrefs.HasKey(NumUuidsPlayerPref)) return;
@@ -351,7 +341,6 @@ public class SpatialAnchorManager : MonoBehaviour
                 restoredModel.transform.localPosition = Vector3.zero;
                 restoredModel.transform.localRotation = Quaternion.identity;
                 
-                // ADJUST HEIGHT HERE TOO: Ensures your loaded anchors honor the prefab height offset
                 DebugCube debugCube = restoredModel.GetComponent<DebugCube>();
                 if (debugCube != null)
                 {
@@ -398,7 +387,6 @@ public class SpatialAnchorManager : MonoBehaviour
         return "Unknown Object";
     }
     
-    // Paste this method anywhere inside your SpatialAnchorManager class
     public bool IsAnchorAlreadyAtPosition(Vector3 checkPosition, float threshold)
     {
         foreach (var anchor in anchors)
