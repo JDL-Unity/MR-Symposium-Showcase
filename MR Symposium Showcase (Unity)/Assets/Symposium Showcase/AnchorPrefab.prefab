@@ -114,6 +114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5061021135764865939}
   - component: {fileID: 2883182306680112304}
+  - component: {fileID: -947181837493048061}
   m_Layer: 0
   m_Name: AnchorPrefab
   m_TagString: Untagged
@@ -150,6 +151,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34e0461a4939d3b4fbdf706bbd80108c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Oculus.VR::OVRSpatialAnchor
+--- !u!114 &-947181837493048061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006638830810898638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 370c29833af060d43a178b469b26858b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  anchorModel: {fileID: 4977462897271579422}
+  anchorCanvas: {fileID: 1287113952331508295}
 --- !u!1 &3128631155330386879
 GameObject:
   m_ObjectHideFlags: 0

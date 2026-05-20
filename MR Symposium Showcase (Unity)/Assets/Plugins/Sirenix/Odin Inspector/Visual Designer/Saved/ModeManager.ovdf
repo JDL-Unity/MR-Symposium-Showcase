@@ -1,0 +1,24 @@
+OVDF v1.1
+ModeManager, Assembly-CSharp
+MetaGuid:1e4e923b62b7c234490bcc70dc953633
+
+# $2qzW7Y47pGfrfzYerSEJC2
+Position: $B1mjvja7CoS9C6f4e9evQ1:0
++ [Sirenix.OdinInspector.HorizontalGroupAttribute]
+	Title = ""
+
+# "Buttons"
+- [Sirenix.OdinInspector.HorizontalGroupAttribute]
+
+# $B1mjvja7CoS9C6f4e9evQ1
+Position: $root:12
++ [Sirenix.OdinInspector.VerticalGroupAttribute]
+
+# EnableSetup()
+Position: $2qzW7Y47pGfrfzYerSEJC2:0
+
+# DisableSetup()
+Position: $2qzW7Y47pGfrfzYerSEJC2:1
+
+# _mode
+Position: $B1mjvja7CoS9C6f4e9evQ1:1
